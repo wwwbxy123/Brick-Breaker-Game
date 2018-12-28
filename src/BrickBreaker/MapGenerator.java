@@ -1,6 +1,9 @@
 package BrickBreaker;
 
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.BasicStroke;
+
 
 
 public class MapGenerator {
@@ -23,10 +26,16 @@ public class MapGenerator {
                 if(map[i][j] > 0){
                     g.setColor(Color.white);
                     g.fillRect(j * brickWidth + 80, i * brickHeight + 50,brickWidth,brickHeight);
+
+                    g.setStroke(new BasicStroke(3));
+                    g.setColor(Color.black);
+                    g.drawRect(j * brickWidth + 80, i * brickHeight + 50,brickWidth,brickHeight);
                 }
             }
         }
     }
-
+    public void setBrickValue(int value, int row, int col){
+        map[row][col] = value;
+    }
 
 }
