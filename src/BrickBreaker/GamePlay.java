@@ -27,11 +27,11 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
     private int ballDirX = -1;
     private int ballDirY = -2;
 
-    private MapGenerator map;
+    private MapGenerator Map;
 
    /** constructor */
     public GamePlay(){
-        map = new MapGenerator(3,7);
+        Map = new MapGenerator(3,7);
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
@@ -45,7 +45,7 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
         g.fillRect(1,1,692,592);
 
         // draw map
-        map.draw((Graphics2D)g);
+        Map.draw((Graphics2D)g);
 
         // borders
         g.setColor(Color.yellow);
@@ -72,6 +72,36 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
         if(play){
             if(new Rectangle(ballPoxX,ballPosY,20,20).intersects(new Rectangle(playX,550,100,8))){
                 ballDirY = -1 * ballDirX;
+            }
+
+            A: for(int i = 0; i < Map.map.length; i++){
+                for(int j = 0; i < Map.map[0].length; j++){
+                    if(Map.map[i][j] > 0){
+                        int brickX = j * Map.brickWidth + 80;
+                        int brickY = i * Map.brickHeight + 50;
+                        int brickWidth = Map.brickWidth;
+                        int brickheight = Map.brickHeight;
+
+                        Rectangle rect = new Rectangle(brickX,brickY,brickWidth,brickheight);
+                        Rectangle ballRect = new Rectangle(ballPoxX,ballPosY,20,20);
+                        Rectangle brickRec = rect;
+
+                        if(ballRect.intersects(brickRec)){
+                            Map.setBrickValue(0,i,j);
+                            totalBricks--;
+                            score = score + 5;
+
+                            if(ballPoxX + 19 <= brickRec.x || ballPoxX + 1 >= ballRect.x + brickRec.width){
+                                ballDirX = -1 * ballDirX;
+                            }
+                            else{
+                                ballDirY = -1 * ballDirY;
+                            }
+
+                            break A;
+                        }
+                    }
+                }
             }
 
             ballPoxX = ballPoxX + ballDirX;
